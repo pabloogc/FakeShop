@@ -1,5 +1,6 @@
 package com.minikorp.fakeshop.shop.model
 
+import com.minikorp.fakeshop.shop.data.network.NetworkProduct
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner

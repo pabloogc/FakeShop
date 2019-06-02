@@ -9,12 +9,10 @@ import com.minikorp.fakeshop.shop.model.discount.DiscountCode
  *
  * @param product actual product.
  * @param discounts discounts applied to the product.
- * @param addedAt time product was added to cart
  *
  */
 data class CartProduct(
     val product: Product,
-    val addedAt: Long = System.currentTimeMillis(),
     val discounts: List<Discount> = emptyList()
 ) {
 

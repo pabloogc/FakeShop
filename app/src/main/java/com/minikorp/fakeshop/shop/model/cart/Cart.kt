@@ -8,7 +8,8 @@ data class Cart(
 ) {
     fun totalPrice(): Price {
         val sum = products.sumBy {
-            it.product.price.value + it.discounts.sumBy { discount -> discount.price.value }
+            it.product.price.value +
+                    it.discounts.sumBy { discount -> discount.price.value }
         }
         return Price(sum)
     }

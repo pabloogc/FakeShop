@@ -1,4 +1,6 @@
-package com.minikorp.fakeshop.shop.model
+package com.minikorp.fakeshop.shop.data.network
+
+
 
 /**
  * A product as it would be served from the server.
@@ -20,3 +22,5 @@ class NetworkProduct(
      */
     val price: Float
 )
+
+class NetworkProductList(val products : List<NetworkProduct>)

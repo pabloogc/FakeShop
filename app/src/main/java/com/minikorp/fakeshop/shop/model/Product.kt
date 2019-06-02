@@ -1,7 +1,6 @@
 package com.minikorp.fakeshop.shop.model
 
-import timber.log.Timber
-import java.util.*
+import com.minikorp.fakeshop.shop.data.network.NetworkProduct
 
 /** Type safe product code */
 inline class ProductCode(val code: String)
@@ -21,14 +20,6 @@ data class Product(
          * abstractions like mapper classes.
          */
         fun fromNetworkProduct(networkProduct: NetworkProduct): Product {
-            val currency = try {
-                Currency.getInstance("EUR")
-            } catch (ex: IllegalArgumentException) {
-                //Should not happen
-                Timber.e(ex, "Unsupported currency EUR")
-                throw  ex
-            }
-
             return Product(
                 code = ProductCode(networkProduct.code),
                 name = networkProduct.name,
