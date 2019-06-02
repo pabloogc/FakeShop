@@ -9,22 +9,14 @@ import java.util.*
 
 @RunWith(RobolectricTestRunner::class)
 class PriceTest {
-
-    @Test
-    fun `usd price displayed with correct format`() {
-        val price = Price(1234, Currency.getInstance("USD"))
-        expectThat(price.displayPrice) {
-            isEqualTo("USD12.34")
-        }
-    }
-
     @Test
     fun `eur price displayed with correct format`() {
-        val price = Price(12, Currency.getInstance("EUR"))
-        expectThat(price.displayPrice) {
-            isEqualTo("€0.12")
+        expectThat(Price(12).displayPrice) {
+            isEqualTo("0,12 €")
+        }
+
+        expectThat(Price(9000).displayPrice) {
+            isEqualTo("90,00 €")
         }
     }
-
-    //TODO: More currency display testing
 }

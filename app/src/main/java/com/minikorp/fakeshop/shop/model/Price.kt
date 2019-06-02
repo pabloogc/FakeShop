@@ -7,11 +7,7 @@ data class Price(
     /**
      * Minimum common denominator for currency (cents), ex: 200 -> 2 euros
      */
-    val price: Int,
-    /**
-     * The currency the price is expressed with.
-     */
-    val currency: Currency
+    val value: Int
 ) {
     /**
      * Human readable price in EU locale.
@@ -21,16 +17,13 @@ data class Price(
      * formatting and locales goes beyond scope of this demo.
      */
     val displayPrice by lazy {
-        val floatingPrice = price.toFloat() /
-                Math.pow(10.0, currency.defaultFractionDigits.toDouble())
+        val floatingPrice = value / 100f
+        //Hardcoded locale to make it appear as euros, for demo only
         NumberFormat
-            //Hardcoded UK locale to make it pretty for demo
-            .getCurrencyInstance(Locale.UK)
-            .apply {
-                currency = this@Price.currency
-            }
+            .getCurrencyInstance(Locale.GERMANY)
             .format(floatingPrice)
     }
 
     override fun toString(): String = displayPrice
+
 }

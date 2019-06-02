@@ -34,9 +34,10 @@ data class Product(
                 name = networkProduct.name,
                 price = Price(
                     //Network products are in full euros,
-                    //but we need to represent in cents
-                    price = networkProduct.price * 100,
-                    currency = currency
+                    //but we want to represent in cents to avoid
+                    //potential floating errors
+                    //also makes formatting easier
+                    value = Math.round(networkProduct.price * 100)
                 )
             )
         }

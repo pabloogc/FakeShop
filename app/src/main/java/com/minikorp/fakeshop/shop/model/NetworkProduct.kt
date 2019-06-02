@@ -5,7 +5,9 @@ package com.minikorp.fakeshop.shop.model
  *
  * Sample JSON:
  *
- * ```{"code":"VOUCHER","name":"Cabify Voucher","price":5}```
+ * ```js
+ * {"code":"VOUCHER","name":"Cabify Voucher","price":5}
+ * ```
  */
 class NetworkProduct(
     val code: String,
@@ -14,7 +16,7 @@ class NetworkProduct(
      */
     val name: String,
     /**
-     * Price in euros, no cents.
+     * Price in euros, cents are decimal values.
      */
-    val price: Int
+    val price: Float
 )
