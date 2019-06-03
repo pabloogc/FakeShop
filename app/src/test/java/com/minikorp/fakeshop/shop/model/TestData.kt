@@ -18,4 +18,8 @@ object TestData {
         name = "Test Product 3",
         price = Price(30000)
     )
+
+    val sampleProducts = listOf(
+        sampleProduct1, sampleProduct2, sampleProduct3
+    )
 }

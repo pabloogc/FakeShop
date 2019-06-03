@@ -1,5 +1,6 @@
-package com.minikorp.fakeshop.shop.data.network
+package com.minikorp.fakeshop.shop.data
 
+import com.minikorp.fakeshop.shop.data.network.ShopApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import org.kodein.di.Kodein
@@ -9,7 +10,7 @@ import org.kodein.di.generic.singleton
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-object NetworkModule {
+object ShopModule {
     fun create(): Kodein.Module = Kodein.Module("NetworkModule") {
 
         bind<Moshi>() with singleton {
@@ -18,12 +19,19 @@ object NetworkModule {
                 .build()
         }
 
-        bind<ProductsApi>() with singleton {
+        bind<Retrofit>() with singleton {
             Retrofit.Builder()
                 .baseUrl("https://api.myjson.com/bins/") //TODO not hardcoded
                 .addConverterFactory(MoshiConverterFactory.create(instance()))
                 .build()
-                .create(ProductsApi::class.java)
+        }
+
+        bind<ShopApi>() with singleton {
+            instance<Retrofit>().create(ShopApi::class.java)
+        }
+
+        bind<ShopRepository>() with singleton {
+            NetworkShopRepository(instance())
         }
     }
 }
