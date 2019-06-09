@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import com.minikorp.fakeshop.R
+import com.minikorp.fakeshop.app.cart.CartModule
 import com.minikorp.fakeshop.app.products.ProductModule
 import com.minikorp.fakeshop.util.KodeinViewModelFactory
 import org.kodein.di.Kodein
@@ -17,8 +18,9 @@ class MainActivity : AppCompatActivity(), KodeinAware {
     override val kodein = Kodein {
         extend(app.kodein)
         //Bind view model factory so ViewModels can be created with dependencies
-        import(ProductModule.create())
         bind<KodeinViewModelFactory>() with singleton { KodeinViewModelFactory(kodein.direct) }
+        import(ProductModule.create())
+        import(CartModule.create())
     }
 
     lateinit var navController: NavController

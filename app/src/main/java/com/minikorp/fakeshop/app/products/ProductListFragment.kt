@@ -2,35 +2,45 @@ package com.minikorp.fakeshop.app.products
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.minikorp.fakeshop.R
+import com.minikorp.fakeshop.app.BaseFragment
+import com.minikorp.fakeshop.app.cart.CartViewModel
 import com.minikorp.fakeshop.shop.model.Product
-import com.minikorp.fakeshop.util.viewModel
+import com.minikorp.fakeshop.util.injectableViewModel
 import kotlinx.android.synthetic.main.products_fragment.*
-import org.kodein.di.Kodein
-import org.kodein.di.KodeinAware
 import kotlin.properties.Delegates
 
-class ProductListFragment : Fragment(), KodeinAware {
+class ProductListFragment : BaseFragment() {
 
-    override val kodein: Kodein
-        get() = (requireActivity() as KodeinAware).kodein
-
-    private val productAdapter = ProductAdapter()
-    private val productListViewModel: ProductListViewModel by viewModel()
+    private val adapter = ProductAdapter()
+    private val productListViewModel: ProductListViewModel by injectableViewModel()
+    private val cartViewModel: CartViewModel by injectableViewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.products_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        product_list.adapter = productAdapter
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        toolbar.menu.add("Cart")
+            .apply {
+                setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                setIcon(R.drawable.ic_shopping_cart)
+                setOnMenuItemClickListener {
+                    findNavController().navigate(R.id.action_productListFragment_to_cartFragment)
+                    true
+                }
+            }
+
+        product_list.adapter = adapter
         product_list.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
         productListViewModel.products.apply {
@@ -40,18 +50,20 @@ class ProductListFragment : Fragment(), KodeinAware {
             }
 
             observe(this@ProductListFragment) {
-                if (it.isSuccess) {
-                    productAdapter.items = it.getOrThrow().products
-                } else {
-                    productAdapter.items = emptyList()
+                it.onSuccess { products ->
+                    adapter.items = products.products
+                }
+                it.onFailure {
+                    adapter.items = emptyList()
                 }
             }
         }
     }
 
-    inner class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name = view.findViewById<TextView>(R.id.product_name)!!
-        val price = view.findViewById<TextView>(R.id.product_price)!!
+        val price = view.findViewById<TextView>(R.id.product_original_price)!!
+        val buyButton = view.findViewById<View>(R.id.product_buy_button)!!
     }
 
     inner class ProductAdapter : RecyclerView.Adapter<ProductViewHolder>() {
@@ -71,6 +83,9 @@ class ProductListFragment : Fragment(), KodeinAware {
             val product = items[position]
             holder.name.text = product.name
             holder.price.text = product.price.displayPrice
+            holder.buyButton.setOnClickListener {
+                cartViewModel.addProduct(product)
+            }
         }
     }
 }

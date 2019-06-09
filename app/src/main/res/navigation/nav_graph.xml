@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
-            app:startDestination="@id/productListFragment"
-            android:id="@+id/nav">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/nav"
+            app:startDestination="@id/productListFragment">
 
-    <fragment android:id="@+id/productListFragment"
-              android:name="com.minikorp.fakeshop.app.products.ProductListFragment"
-              tools:layout="@layout/products_fragment"
-              android:label="ProductListFragment"/>
+    <fragment
+            android:id="@+id/productListFragment"
+            android:name="com.minikorp.fakeshop.app.products.ProductListFragment"
+            android:label="ProductListFragment"
+            tools:layout="@layout/products_fragment">
+        <action
+                android:id="@+id/action_productListFragment_to_cartFragment"
+                app:destination="@id/cartFragment"/>
+    </fragment>
+    <fragment
+            android:id="@+id/cartFragment"
+            android:name="com.minikorp.fakeshop.app.cart.CartFragment"
+            android:label="CartFragment"
+            tools:layout="@layout/cart_fragment"/>
 </navigation>

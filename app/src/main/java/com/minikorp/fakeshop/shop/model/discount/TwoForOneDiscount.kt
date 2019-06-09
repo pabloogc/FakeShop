@@ -2,7 +2,7 @@ package com.minikorp.fakeshop.shop.model.discount
 
 import com.minikorp.fakeshop.shop.model.Price
 import com.minikorp.fakeshop.shop.model.ProductCode
-import com.minikorp.fakeshop.shop.model.cart.Cart
+import com.minikorp.fakeshop.shop.model.cart.CartProduct
 
 /**
  * Two for one discount,
@@ -16,15 +16,15 @@ class TwoForOneDiscount(val targetProduct: ProductCode) : ApplicableDiscount {
     override val priority: Int = 100
     override val code: DiscountCode = DiscountCode("TwoForOne($targetProduct)")
 
-    override fun apply(cart: Cart): Cart {
+    override fun apply(products: List<CartProduct>): List<CartProduct> {
         //Find products index that that match target product
         //And don't have any other discount applied
         //(this logic can be as complex as needed)
 
         //Work with index to keep original ordering
         //without doing functional spaghetti
-        val out = ArrayList(cart.products)
-        cart.products
+        val out = ArrayList(products)
+        products
             .mapIndexedNotNull { index, product ->
                 index.takeIf {
                     product.product.code == targetProduct && product.discounts.isEmpty()
@@ -46,7 +46,7 @@ class TwoForOneDiscount(val targetProduct: ProductCode) : ApplicableDiscount {
                 )
             }
 
-        return Cart(products = out)
+        return out
     }
 
 }

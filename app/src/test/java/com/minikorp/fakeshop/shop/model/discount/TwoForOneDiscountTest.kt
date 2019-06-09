@@ -2,12 +2,10 @@ package com.minikorp.fakeshop.shop.model.discount
 
 import com.minikorp.fakeshop.shop.model.TestData
 import com.minikorp.fakeshop.shop.model.cart.Cart
-import com.minikorp.fakeshop.shop.model.cart.CartProduct
 import org.junit.Test
 import strikt.api.expect
 import strikt.api.expectThat
 import strikt.assertions.get
-import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 
 /**
@@ -17,20 +15,18 @@ class TwoForOneDiscountTest {
 
     @Test
     fun `items have discount`() {
-        val cart = Cart(
-            listOf(
-                CartProduct(product = TestData.sampleProduct2),
-                CartProduct(product = TestData.sampleProduct1),
-                CartProduct(product = TestData.sampleProduct3),
-                CartProduct(product = TestData.sampleProduct1)
-            )
+        val cart = Cart.create(
+            products = listOf(
+                TestData.sampleProduct2,
+                TestData.sampleProduct1,
+                TestData.sampleProduct3,
+                TestData.sampleProduct1
+            ),
+            discounts = listOf(TwoForOneDiscount(TestData.sampleProduct1.code))
         )
-        val discount = TwoForOneDiscount(TestData.sampleProduct1.code)
-        val discountedCart = discount.apply(cart)
 
         expect {
-            that(discountedCart.products) {
-                hasSize(cart.products.size)
+            that(cart.discountedProducts) {
                 get(1).get {
                     expectThat(discounts.first().price.value) {
                         isEqualTo(0)
@@ -44,77 +40,73 @@ class TwoForOneDiscountTest {
             }
         }
 
-        expectThat(discountedCart.totalPrice().value) {
+        expectThat(cart.totalPrice()) {
             //One is discounted
             isEqualTo(
-                TestData.sampleProduct1.price.value
-                        + TestData.sampleProduct2.price.value
-                        + TestData.sampleProduct3.price.value
+                TestData.sampleProduct1.price
+                        + TestData.sampleProduct2.price
+                        + TestData.sampleProduct3.price
             )
         }
     }
 
     @Test
     fun `discounts are only applied once`() {
-        val cart = Cart(
-            listOf(
-                CartProduct(product = TestData.sampleProduct2),
-                CartProduct(product = TestData.sampleProduct1),
-                CartProduct(product = TestData.sampleProduct3),
-                CartProduct(product = TestData.sampleProduct1)
-            )
+        val cart = Cart.create(
+            products = listOf(
+                TestData.sampleProduct2,
+                TestData.sampleProduct1,
+                TestData.sampleProduct3,
+                TestData.sampleProduct1
+            ),
+            discounts = listOf(TwoForOneDiscount(TestData.sampleProduct1.code))
         )
-        val discount = TwoForOneDiscount(TestData.sampleProduct1.code)
-        //Apply two times
-        val discountedCart = discount.apply(discount.apply(cart))
-        expectThat(discountedCart.totalPrice().value) {
+        expectThat(cart.totalPrice()) {
             //One is discounted
             isEqualTo(
-                TestData.sampleProduct1.price.value
-                        + TestData.sampleProduct2.price.value
-                        + TestData.sampleProduct3.price.value
+                TestData.sampleProduct1.price
+                        + TestData.sampleProduct2.price
+                        + TestData.sampleProduct3.price
             )
         }
     }
 
     @Test
-    fun `discounts_applied_in_pairs`() {
-        val cart = Cart(
-            listOf(
-                CartProduct(product = TestData.sampleProduct1),
-                CartProduct(product = TestData.sampleProduct1),
-                CartProduct(product = TestData.sampleProduct3),
-                CartProduct(product = TestData.sampleProduct1)
-            )
+    fun `discounts applied in pairs`() {
+        val cart = Cart.create(
+            products = listOf(
+                TestData.sampleProduct1,
+                TestData.sampleProduct1,
+                TestData.sampleProduct3,
+                TestData.sampleProduct1
+            ),
+            discounts = listOf(TwoForOneDiscount(TestData.sampleProduct1.code))
         )
-        val discount = TwoForOneDiscount(TestData.sampleProduct1.code)
-        val discountedCart = discount.apply(cart)
-        expectThat(discountedCart.totalPrice().value) {
+
+        expectThat(cart.totalPrice()) {
             //One is discounted, other is same
             isEqualTo(
-                TestData.sampleProduct1.price.value
-                        + TestData.sampleProduct1.price.value
-                        + TestData.sampleProduct3.price.value
+                TestData.sampleProduct1.price
+                        + TestData.sampleProduct1.price
+                        + TestData.sampleProduct3.price
             )
         }
     }
 
     @Test
-    fun `order is preserved`() {
-        val cart = Cart(
-            listOf(
-                CartProduct(product = TestData.sampleProduct1),
-                CartProduct(product = TestData.sampleProduct1),
-                CartProduct(product = TestData.sampleProduct3),
-                CartProduct(product = TestData.sampleProduct1)
-            )
+    fun `order is preserved when discounting`() {
+        val products = listOf(
+            TestData.sampleProduct1,
+            TestData.sampleProduct1,
+            TestData.sampleProduct3,
+            TestData.sampleProduct1
         )
-        val discount = TwoForOneDiscount(TestData.sampleProduct1.code)
-        val discountedCart = discount.apply(cart)
-        expectThat(discountedCart.products.map { it.product }) {
-            isEqualTo(cart.products.map { it.product })
+        val cart = Cart.create(
+            products,
+            discounts = listOf(TwoForOneDiscount(TestData.sampleProduct1.code))
+        )
+        expectThat(cart.discountedProducts.map { it.product }) {
+            isEqualTo(products)
         }
     }
-
-    //TODO: Add more tests for other cases
 }

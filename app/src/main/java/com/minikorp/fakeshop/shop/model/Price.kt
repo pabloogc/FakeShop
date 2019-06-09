@@ -16,7 +16,7 @@ data class Price(
      * the price to human readable text, however,
      * formatting and locales goes beyond scope of this demo.
      */
-    val displayPrice by lazy {
+    val displayPrice: String by lazy {
         val floatingPrice = value / 100f
         //Hardcoded locale to make it appear as euros, for demo only
         NumberFormat
@@ -25,5 +25,9 @@ data class Price(
     }
 
     override fun toString(): String = displayPrice
+
+    operator fun plus(other: Price): Price {
+        return Price(this.value + other.value)
+    }
 
 }

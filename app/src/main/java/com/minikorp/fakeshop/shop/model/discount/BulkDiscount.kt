@@ -2,13 +2,13 @@ package com.minikorp.fakeshop.shop.model.discount
 
 import com.minikorp.fakeshop.shop.model.Price
 import com.minikorp.fakeshop.shop.model.ProductCode
-import com.minikorp.fakeshop.shop.model.cart.Cart
+import com.minikorp.fakeshop.shop.model.cart.CartProduct
 
 /**
  * Apply bulk discount for a product after count threshold.
  *
  * @param targetProduct The product that can receive the discount.
- * @param priceDiscount The discount to apply
+ * @param priceDiscount The discount to apply to base price (relative value).
  * @param minQuantity Minimum amount of products before discount can be applied.
  *
  * @see [TwoForOneDiscount] for more rationale.
@@ -22,11 +22,11 @@ class BulkDiscount(
     override val priority: Int = 100
     override val code: DiscountCode = DiscountCode("Bulk($targetProduct)")
 
-    override fun apply(cart: Cart): Cart {
-        val out = ArrayList(cart.products)
+    override fun apply(products: List<CartProduct>): List<CartProduct> {
+        val out = ArrayList(products)
         //Work with index to keep original ordering
         //without doing functional spaghetti
-        cart.products
+        products
             .mapIndexedNotNull { index, product ->
                 index.takeIf {
                     product.product.code == targetProduct && product.discounts.isEmpty()
@@ -42,7 +42,7 @@ class BulkDiscount(
                 )
             }
 
-        return Cart(products = out)
+        return out
     }
 
 }

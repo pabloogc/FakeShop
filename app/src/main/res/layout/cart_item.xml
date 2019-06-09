@@ -15,10 +15,24 @@
             android:layout_width="match_parent"
             android:orientation="vertical">
 
-        <TextView
-                android:id="@+id/product_name"
-                android:layout_height="wrap_content"
+        <ImageView
+                style="@style/Widget.AppCompat.ActionButton"
+                android:id="@+id/cart_product_delete"
+                android:layout_height="52dp"
                 android:layout_marginBottom="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ic_delete"/>
+
+        <TextView
+                android:id="@+id/cart_product_name"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="8dp"
@@ -26,31 +40,35 @@
                 android:layout_marginTop="8dp"
                 android:layout_width="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/product_original_price"
+                app:layout_constraintEnd_toStartOf="@id/cart_product_original_price"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Product Name"/>
 
         <TextView
-                android:id="@+id/product_original_price"
+                android:id="@+id/cart_product_original_price"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="32dp"
-                android:layout_marginRight="32dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_width="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/product_name"
-                app:layout_constraintEnd_toStartOf="@id/product_buy_button"
+                app:layout_constraintBaseline_toBaselineOf="@+id/cart_product_name"
+                app:layout_constraintEnd_toStartOf="@id/cart_product_price"
+                android:textSize="12sp"
+                android:textColor="?android:textColorSecondary"
                 tools:text="12,37 €"/>
 
-        <com.google.android.material.button.MaterialButton
-                android:id="@+id/product_buy_button"
+        <TextView
+                android:id="@+id/cart_product_price"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_width="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="Buy"/>
+                android:textSize="18sp"
+                app:layout_constraintBaseline_toBaselineOf="@id/cart_product_name"
+                app:layout_constraintEnd_toStartOf="@+id/cart_product_delete"
+                tools:text="12,37 €"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </com.google.android.material.card.MaterialCardView>

@@ -13,23 +13,32 @@ import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
 import org.kodein.di.generic.instanceOrNull
 
+/**
+ * Bind ViewModel to kodein module so it can retrieve dependencies.
+ */
 inline fun <reified T : ViewModel> Kodein.Builder.bindViewModel(overrides: Boolean? = null)
         : Kodein.Builder.TypeBinder<T> {
-    return bind<T>(T::class.java.simpleName, overrides)
+    return bind<T>(T::class.java.name, overrides)
 }
 
-inline fun <reified VM : ViewModel, T> T.viewModel(): Lazy<VM> where T : KodeinAware, T : FragmentActivity {
-    return lazy { ViewModelProviders.of(this, direct.instance()).get(VM::class.java) }
-}
-
-inline fun <reified VM : ViewModel, T> T.viewModel(): Lazy<VM> where T : KodeinAware, T : Fragment {
-    return lazy { ViewModelProviders.of(this, direct.instance<KodeinViewModelFactory>()).get(VM::class.java) }
-}
-
+/**
+ * The view model factory using Kodein.
+ */
 class KodeinViewModelFactory(private val injector: DKodein) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return injector.instanceOrNull<ViewModel>(tag = modelClass.simpleName) as T?
-            ?: modelClass.newInstance()
+        return injector.instanceOrNull<ViewModel>(tag = modelClass.name) as T? ?: modelClass.newInstance()
+    }
+}
+
+inline fun <reified VM : ViewModel, T> T.injectableViewModel(): Lazy<VM> where T : KodeinAware, T : FragmentActivity {
+    return lazy {
+        ViewModelProviders.of(this, direct.instance()).get(VM::class.java)
+    }
+}
+
+inline fun <reified VM : ViewModel, T> T.injectableViewModel(): Lazy<VM> where T : KodeinAware, T : Fragment {
+    return lazy {
+        ViewModelProviders.of(this.requireActivity(), direct.instance<KodeinViewModelFactory>()).get(VM::class.java)
     }
 }
