@@ -32,6 +32,8 @@ class MainActivity : AppCompatActivity(), KodeinAware {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+
+        //Setup toolbar (order of this calls is important, toolbar must be set before nav controller)
         setSupportActionBar(toolbar)
         val nav = findNavController(R.id.nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration(nav.graph)

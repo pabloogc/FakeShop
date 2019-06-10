@@ -36,7 +36,7 @@ class NetworkShopRepository(private val api: ShopApi) : ShopRepository {
         return Result.success(
             listOf(
                 TwoForOneDiscount(ProductCode("VOUCHER")),
-                BulkDiscount(ProductCode("TSHIRT"), Price(-1000), 3)
+                BulkDiscount(ProductCode("TSHIRT"), Price(-100), 3)
             )
         )
     }

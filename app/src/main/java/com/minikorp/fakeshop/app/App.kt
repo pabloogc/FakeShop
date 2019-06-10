@@ -21,6 +21,9 @@ class App : Application(), KodeinAware {
         }
     }
 
+    /**
+     * Application wide [Kodein]. For Controllers / Repositories / Interactors.
+     */
     override val kodein: Kodein by Kodein.lazy {
         import(ShopModule.create())
     }

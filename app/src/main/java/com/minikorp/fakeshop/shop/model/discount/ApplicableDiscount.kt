@@ -12,10 +12,11 @@ interface ApplicableDiscount {
 
     /**
      * Apply the discount to the list of products.
+     * Order of must be maintained.
      *
      * If it's not applicable same list may be returned.
      *
-     * @return the products, with discounts applied.
+     * @return the products, with discounts applied, in same order.
      */
     fun apply(products: List<CartProduct>): List<CartProduct>
 }

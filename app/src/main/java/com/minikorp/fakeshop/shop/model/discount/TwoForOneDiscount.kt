@@ -31,7 +31,7 @@ class TwoForOneDiscount(val targetProduct: ProductCode) : ApplicableDiscount {
             }
             .windowed(size = 2, step = 2) //Take by pairs
             .forEach { (firstIdx, secondIdx) ->
-                //Keep same as same price (but apply discount),
+                //Keep as is
                 //Add discount to make price 0 to second one
                 val first = out[firstIdx]
                 val second = out[secondIdx]

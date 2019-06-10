@@ -21,6 +21,7 @@ class BulkDiscount(
 
     override val code: DiscountCode = DiscountCode("Bulk($targetProduct)")
 
+    //TODO: Test this similar to TwoForOne
     override fun apply(products: List<CartProduct>): List<CartProduct> {
         val out = ArrayList(products)
         //Work with index to keep original ordering

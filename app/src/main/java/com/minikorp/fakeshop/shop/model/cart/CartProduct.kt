@@ -3,7 +3,6 @@ package com.minikorp.fakeshop.shop.model.cart
 import com.minikorp.fakeshop.shop.model.Price
 import com.minikorp.fakeshop.shop.model.Product
 import com.minikorp.fakeshop.shop.model.discount.Discount
-import com.minikorp.fakeshop.shop.model.discount.DiscountCode
 
 /**
  * A product inside a cart, with the discounts that have been applied.
@@ -20,14 +19,10 @@ data class CartProduct constructor(
     val discounts: List<Discount> = emptyList()
 ) {
 
+    /**
+     * The final price after discounts.
+     */
     val discountedPrice: Price = Price(
         product.price.value + discounts.sumBy { it.price.value }
     )
-
-    /**
-     * Check if a discount with specific code has already been applied.
-     */
-    fun hasDiscount(code: DiscountCode): Boolean {
-        return discounts.find { it.code == code } != null
-    }
 }

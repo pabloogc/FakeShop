@@ -10,6 +10,9 @@ import org.kodein.di.generic.singleton
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
+/**
+ * Application wide module, holding bindings to communicate with the API (Retrofit, Moshi, API itself..)
+ */
 object ShopModule {
     fun create(): Kodein.Module = Kodein.Module("NetworkModule") {
 

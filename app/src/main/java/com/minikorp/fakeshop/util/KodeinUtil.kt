@@ -13,17 +13,13 @@ import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
 import org.kodein.di.generic.instanceOrNull
 
-/**
- * Bind ViewModel to kodein module so it can retrieve dependencies.
- */
+/** Utility function to bind ViewModel to kodein module so it can retrieve dependencies. */
 inline fun <reified T : ViewModel> Kodein.Builder.bindViewModel(overrides: Boolean? = null)
         : Kodein.Builder.TypeBinder<T> {
     return bind<T>(T::class.java.name, overrides)
 }
 
-/**
- * The view model factory using Kodein.
- */
+/** The view model factory using Kodein. */
 class KodeinViewModelFactory(private val injector: DKodein) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -31,12 +27,14 @@ class KodeinViewModelFactory(private val injector: DKodein) : ViewModelProvider.
     }
 }
 
+/** Utility property to avoid boilerplate injecting view models */
 inline fun <reified VM : ViewModel, T> T.injectableViewModel(): Lazy<VM> where T : KodeinAware, T : FragmentActivity {
     return lazy {
         ViewModelProviders.of(this, direct.instance()).get(VM::class.java)
     }
 }
 
+/** Utility property to avoid boilerplate injecting view models */
 inline fun <reified VM : ViewModel, T> T.injectableViewModel(): Lazy<VM> where T : KodeinAware, T : Fragment {
     return lazy {
         ViewModelProviders.of(this.requireActivity(), direct.instance<KodeinViewModelFactory>()).get(VM::class.java)

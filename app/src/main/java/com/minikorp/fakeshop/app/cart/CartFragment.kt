@@ -35,7 +35,7 @@ class CartFragment : BaseFragment() {
         cartViewModel.cart
             .observe(this) {
                 adapter.updateItems(it.discountedProducts)
-                //Hardcoded string concat, out of scope
+                //Hardcoded string concat, out of scope for demo
                 @SuppressLint("SetTextI18n")
                 cart_total.text = "Total - ${it.totalPrice().displayPrice}"
             }
@@ -54,6 +54,7 @@ class CartFragment : BaseFragment() {
         private var items: List<CartProduct> = emptyList()
 
         fun updateItems(new: List<CartProduct>) {
+            //With some basic animations that look nice
             val old = items
             val diff = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                 override fun getOldListSize(): Int = old.size

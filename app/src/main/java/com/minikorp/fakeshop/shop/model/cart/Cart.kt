@@ -17,6 +17,13 @@ class Cart private constructor(
     companion object {
         private val counter = AtomicInteger()
 
+        /**
+         * Factory function, since [Cart] is not a data class and
+         * needs to initialize in a specific way based on discounts.
+         *
+         * @param products starting products inside the cart
+         * @param discounts discounts that will be applied to products.
+         */
         fun create(
             products: List<Product> = emptyList(),
             discounts: List<ApplicableDiscount> = emptyList()
@@ -68,6 +75,9 @@ class Cart private constructor(
         )
     }
 
+    /**
+     * Sum of all prices with discounts applied.
+     */
     fun totalPrice(): Price {
         val sum = discountedProducts.sumBy { it.discountedPrice.value }
         return Price(sum)
@@ -77,11 +87,11 @@ class Cart private constructor(
      * Clear current discounts and apply again.
      */
     private fun recomputeDiscounts(toDiscount: List<CartProduct>): List<CartProduct> {
-        //This can be done with a simple for loop
+        //*Note*
+        //This can be done with a simple for loop in a mutable list
         //but since we are in a functional style let's keep rolling.
-
-        //*Note* I would _never_ write this code in a production app.
-        //It's terrible to read
+        //I would _never_ write this code in a production app.
+        //It's terrible to read and not very memory friendly
 
         //Clear current discounts, and apply again
         return toDiscount
