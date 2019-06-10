@@ -26,25 +26,12 @@ class Cart private constructor(
         }
     }
 
-//    val discountedProducts: List<CartProduct> = products.let { products ->
-//        return@let discounts.fold(
-//            products.map { CartProduct(product = it) },
-//            { acc, discount -> discount.apply(acc) }
-//        )
-//    }
-
     /**
      * Add a new product(s) to the cart and return it.
      *
      * @return The new cart, with recalculated discounts
      */
     fun addProducts(vararg products: Product): Cart {
-        //This can be done with a simple for loop
-        //but since we are in a functional style let's keep rolling.
-
-        //*Note* I would _never_ write this code in a production app.
-        //It's terrible to read
-
         //Add the product, and recompute discounted product list
         //maintaining ID's
         val toDiscount = this.discountedProducts
@@ -90,6 +77,12 @@ class Cart private constructor(
      * Clear current discounts and apply again.
      */
     private fun recomputeDiscounts(toDiscount: List<CartProduct>): List<CartProduct> {
+        //This can be done with a simple for loop
+        //but since we are in a functional style let's keep rolling.
+
+        //*Note* I would _never_ write this code in a production app.
+        //It's terrible to read
+
         //Clear current discounts, and apply again
         return toDiscount
             .map { CartProduct(id = it.id, product = it.product, discounts = emptyList()) }

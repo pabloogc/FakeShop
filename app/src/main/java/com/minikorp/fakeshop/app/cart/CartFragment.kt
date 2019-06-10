@@ -1,5 +1,6 @@
 package com.minikorp.fakeshop.app.cart
 
+import android.annotation.SuppressLint
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -34,7 +35,9 @@ class CartFragment : BaseFragment() {
         cartViewModel.cart
             .observe(this) {
                 adapter.updateItems(it.discountedProducts)
-                cart_total.text = it.totalPrice().displayPrice
+                //Hardcoded string concat, out of scope
+                @SuppressLint("SetTextI18n")
+                cart_total.text = "Total - ${it.totalPrice().displayPrice}"
             }
     }
 
@@ -44,11 +47,11 @@ class CartFragment : BaseFragment() {
             paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         }
         val discountedPrice = view.findViewById<TextView>(R.id.cart_product_price)!!
-        val deleteButton = view.findViewById<View>(R.id.cart_product_delete)
+        val deleteButton = view.findViewById<View>(R.id.cart_product_delete)!!
     }
 
     inner class CartAdapter : RecyclerView.Adapter<CartViewHolder>() {
-        var items: List<CartProduct> = emptyList()
+        private var items: List<CartProduct> = emptyList()
 
         fun updateItems(new: List<CartProduct>) {
             val old = items
@@ -58,12 +61,13 @@ class CartFragment : BaseFragment() {
                 override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
                     return old[oldItemPosition].id == new[newItemPosition].id
                 }
+
                 override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
                     return old[oldItemPosition] == new[newItemPosition]
                 }
             })
-            diff.dispatchUpdatesTo(this)
             items = new
+            diff.dispatchUpdatesTo(this)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {

@@ -19,7 +19,6 @@ class BulkDiscount(
     val minQuantity: Int
 ) : ApplicableDiscount {
 
-    override val priority: Int = 100
     override val code: DiscountCode = DiscountCode("Bulk($targetProduct)")
 
     override fun apply(products: List<CartProduct>): List<CartProduct> {

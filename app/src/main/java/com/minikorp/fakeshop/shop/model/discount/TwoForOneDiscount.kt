@@ -13,7 +13,6 @@ import com.minikorp.fakeshop.shop.model.cart.CartProduct
  */
 class TwoForOneDiscount(val targetProduct: ProductCode) : ApplicableDiscount {
 
-    override val priority: Int = 100
     override val code: DiscountCode = DiscountCode("TwoForOne($targetProduct)")
 
     override fun apply(products: List<CartProduct>): List<CartProduct> {

@@ -29,5 +29,4 @@ data class Price(
     operator fun plus(other: Price): Price {
         return Price(this.value + other.value)
     }
-
 }

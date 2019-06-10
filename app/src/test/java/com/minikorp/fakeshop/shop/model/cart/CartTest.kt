@@ -24,6 +24,30 @@ class CartTest {
     }
 
     @Test
+    fun `ids are maintained`() {
+        val cart = Cart.create()
+            .addProducts(TestData.sampleProduct1)
+            .addProducts(TestData.sampleProduct2)
+            .addProducts(TestData.sampleProduct3)
+
+        val originalIds = cart.discountedProducts.map { it.id }
+        val afterAddCart = cart.addProducts(TestData.sampleProduct1)
+        val afterAddIds = afterAddCart.discountedProducts.map { it.id }
+
+        expect {
+            that(originalIds.distinct()) {
+                hasSize(3)
+            }
+            that(afterAddIds.distinct()) {
+                hasSize(4)
+            }
+            that(originalIds + afterAddIds.last()) {
+                isEqualTo(afterAddIds)
+            }
+        }
+    }
+
+    @Test
     fun `total adds all products`() {
         val cart = Cart.create()
             .addProducts(TestData.sampleProduct1)

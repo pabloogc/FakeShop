@@ -8,15 +8,17 @@
     <fragment
             android:id="@+id/productListFragment"
             android:name="com.minikorp.fakeshop.app.products.ProductListFragment"
-            android:label="ProductListFragment"
+            android:label="Products"
             tools:layout="@layout/products_fragment">
         <action
                 android:id="@+id/action_productListFragment_to_cartFragment"
+                app:popUpTo="@id/productListFragment"
+                app:popUpToInclusive="false"
                 app:destination="@id/cartFragment"/>
     </fragment>
     <fragment
             android:id="@+id/cartFragment"
             android:name="com.minikorp.fakeshop.app.cart.CartFragment"
-            android:label="CartFragment"
+            android:label="Cart"
             tools:layout="@layout/cart_fragment"/>
 </navigation>

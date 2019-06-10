@@ -1,10 +1,7 @@
 package com.minikorp.fakeshop.app.products
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -14,9 +11,10 @@ import com.minikorp.fakeshop.R
 import com.minikorp.fakeshop.app.BaseFragment
 import com.minikorp.fakeshop.app.cart.CartViewModel
 import com.minikorp.fakeshop.shop.model.Product
+import com.minikorp.fakeshop.shop.model.Resource
 import com.minikorp.fakeshop.util.injectableViewModel
+import com.minikorp.fakeshop.util.toggleViewsVisibility
 import kotlinx.android.synthetic.main.products_fragment.*
-import kotlin.properties.Delegates
 
 class ProductListFragment : BaseFragment() {
 
@@ -24,40 +22,50 @@ class ProductListFragment : BaseFragment() {
     private val productListViewModel: ProductListViewModel by injectableViewModel()
     private val cartViewModel: CartViewModel by injectableViewModel()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.products_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        toolbar.menu.add("Cart")
-            .apply {
-                setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                setIcon(R.drawable.ic_shopping_cart)
-                setOnMenuItemClickListener {
-                    findNavController().navigate(R.id.action_productListFragment_to_cartFragment)
-                    true
-                }
-            }
 
         product_list.adapter = adapter
         product_list.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
-        productListViewModel.products.apply {
-            val value = this.value
-            if (value == null || value.isFailure) {
-                productListViewModel.fetchProducts()
-            }
+        if (productListViewModel.products.value == null) {
+            //Fetch first time, won't have effect if already loading
+            productListViewModel.fetchProducts()
+        }
 
-            observe(this@ProductListFragment) {
-                it.onSuccess { products ->
-                    adapter.items = products.products
-                }
-                it.onFailure {
-                    adapter.items = emptyList()
-                }
+        product_error_button.setOnClickListener {
+            productListViewModel.fetchProducts()
+        }
+
+        productListViewModel.products.observe(this) {
+            toggleViewsVisibility(it, product_list, product_progress_bar, product_error_button)
+            when (it) {
+                is Resource.Success -> adapter.updateItems(it.data!!.products)
+                is Resource.Error -> product_error_button.text = it.message ?: "Unknown Error"
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_go_cart) {
+            findNavController().navigate(R.id.action_productListFragment_to_cartFragment)
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -67,7 +75,10 @@ class ProductListFragment : BaseFragment() {
     }
 
     inner class ProductAdapter : RecyclerView.Adapter<ProductViewHolder>() {
-        var items: List<Product> by Delegates.observable(emptyList()) { _, _, _ ->
+        private var items: List<Product> = emptyList()
+
+        fun updateItems(new: List<Product>) {
+            items = new
             notifyDataSetChanged()
         }
 

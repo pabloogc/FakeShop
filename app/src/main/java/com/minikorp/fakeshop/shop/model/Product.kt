@@ -35,4 +35,4 @@ data class Product(
     }
 }
 
-data class ProductList(val products: List<Product>)
+inline class ProductList(val products: List<Product>)
