@@ -1,6 +1,6 @@
 package com.minikorp.fakeshop.shop.model.discount
 
-import com.minikorp.fakeshop.shop.model.TestData
+import com.minikor.fakeshop.testdata.TestData
 import com.minikorp.fakeshop.shop.model.cart.Cart
 import org.junit.Test
 import strikt.api.expect

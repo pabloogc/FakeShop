@@ -20,3 +20,5 @@ interface ApplicableDiscount {
      */
     fun apply(products: List<CartProduct>): List<CartProduct>
 }
+
+inline class ApplicableDiscountList(val discounts: List<ApplicableDiscount>)

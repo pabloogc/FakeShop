@@ -16,14 +16,14 @@ import org.kodein.di.generic.instanceOrNull
 /** Utility function to bind ViewModel to kodein module so it can retrieve dependencies. */
 inline fun <reified T : ViewModel> Kodein.Builder.bindViewModel(overrides: Boolean? = null)
         : Kodein.Builder.TypeBinder<T> {
-    return bind<T>(T::class.java.name, overrides)
+    return bind<T>(T::class.java, overrides)
 }
 
 /** The view model factory using Kodein. */
 class KodeinViewModelFactory(private val injector: DKodein) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return injector.instanceOrNull<ViewModel>(tag = modelClass.name) as T? ?: modelClass.newInstance()
+        return injector.instanceOrNull<ViewModel>(tag = modelClass) as T? ?: modelClass.newInstance()
     }
 }
 

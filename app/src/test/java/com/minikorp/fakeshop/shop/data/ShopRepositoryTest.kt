@@ -1,9 +1,9 @@
 package com.minikorp.fakeshop.shop.data
 
+import com.minikor.fakeshop.testdata.TestData
 import com.minikorp.fakeshop.shop.data.network.NetworkProduct
 import com.minikorp.fakeshop.shop.data.network.NetworkProductList
 import com.minikorp.fakeshop.shop.data.network.ShopApi
-import com.minikorp.fakeshop.shop.model.TestData
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.mock

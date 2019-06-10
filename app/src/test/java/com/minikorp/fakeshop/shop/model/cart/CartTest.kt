@@ -1,6 +1,6 @@
 package com.minikorp.fakeshop.shop.model.cart
 
-import com.minikorp.fakeshop.shop.model.TestData
+import com.minikor.fakeshop.testdata.TestData
 import org.junit.Test
 import strikt.api.expect
 import strikt.assertions.hasSize

@@ -2,7 +2,6 @@ package com.minikorp.fakeshop.app
 
 import android.app.Application
 import com.minikorp.fakeshop.BuildConfig
-import com.minikorp.fakeshop.shop.data.ShopModule
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import timber.log.Timber
@@ -25,6 +24,6 @@ class App : Application(), KodeinAware {
      * Application wide [Kodein]. For Controllers / Repositories / Interactors.
      */
     override val kodein: Kodein by Kodein.lazy {
-        import(ShopModule.create())
+        import(AppModule.create())
     }
 }

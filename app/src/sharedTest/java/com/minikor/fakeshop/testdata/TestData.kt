@@ -1,4 +1,8 @@
-package com.minikorp.fakeshop.shop.model
+package com.minikor.fakeshop.testdata
+
+import com.minikorp.fakeshop.shop.model.Price
+import com.minikorp.fakeshop.shop.model.Product
+import com.minikorp.fakeshop.shop.model.ProductCode
 
 object TestData {
     val sampleProduct1 = Product(
@@ -20,6 +24,8 @@ object TestData {
     )
 
     val sampleProducts = listOf(
-        sampleProduct1, sampleProduct2, sampleProduct3
+        sampleProduct1,
+        sampleProduct2,
+        sampleProduct3
     )
 }

@@ -8,14 +8,14 @@ import com.minikorp.fakeshop.shop.model.Product
 import com.minikorp.fakeshop.shop.model.cart.Cart
 import com.minikorp.fakeshop.shop.model.cart.CartProduct
 
-class CartViewModel(private val shopRepository: ShopRepository) : ViewModel() {
+class CartViewModel(shopRepository: ShopRepository) : ViewModel() {
 
     val cart = MutableLiveData<Cart>(
         Cart.create(
             //Maybe some persistence / network call here
             //To bring any active cart from website / iOS
             products = emptyList(),
-            discounts = shopRepository.getActiveDiscounts().getOrThrow()
+            discounts = shopRepository.getActiveDiscounts().getOrThrow().discounts
         )
     )
 

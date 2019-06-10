@@ -10,6 +10,16 @@ android {
         freeCompilerArgs = ['-XXLanguage:+InlineClasses', '-Xallow-result-return-type']
     }
 
+    sourceSets {
+        String sharedTestDir = 'src/sharedTest/java'
+        test {
+            java.srcDir sharedTestDir
+        }
+        androidTest {
+            java.srcDir sharedTestDir
+        }
+    }
+
     defaultConfig {
         applicationId "com.minikorp.fakeshop"
         minSdkVersion 16
@@ -42,6 +52,9 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    androidTestImplementation ('org.jetbrains.kotlin:kotlin-reflect:1.2.71') {
+        force = true //To avoid conflicts in testing libs
+    }
 
     //DI
     implementation 'org.kodein.di:kodein-di-generic-jvm:6.2.1'
@@ -62,7 +75,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$arch_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$arch_version"
 
-    def navigation = "2.1.0-alpha04"
+    def navigation = "2.1.0-alpha05"
     implementation "androidx.navigation:navigation-runtime-ktx:$navigation"
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation"
@@ -82,7 +95,16 @@ dependencies {
     testImplementation 'io.strikt:strikt-core:0.20.1'
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0'
 
-
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test:core:1.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'io.strikt:strikt-core:0.20.1'
+    //Fragment debug, androidx is excluded otherwise it fails to resolve
+    //or debug manifest doesn't have proper entry
+    androidTestImplementation 'androidx.fragment:fragment-testing:1.1.0-beta01'
+    debugImplementation("androidx.fragment:fragment-testing:1.1.0-beta01") {
+        exclude group: 'androidx.test'
+    }
 }
