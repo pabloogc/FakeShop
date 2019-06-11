@@ -90,9 +90,10 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     //Testing
+    def strikt_version = "0.20.1"
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:4.3'
-    testImplementation 'io.strikt:strikt-core:0.20.1'
+    testImplementation "io.strikt:strikt-core:$strikt_version"
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
@@ -100,11 +101,14 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    androidTestImplementation 'io.strikt:strikt-core:0.20.1'
-    //Fragment debug, androidx is excluded otherwise it fails to resolve
-    //or debug manifest doesn't have proper entry
-    androidTestImplementation 'androidx.fragment:fragment-testing:1.1.0-beta01'
-    debugImplementation("androidx.fragment:fragment-testing:1.1.0-beta01") {
+    androidTestImplementation "io.strikt:strikt-core:$strikt_version"
+    def fragment_testing_version = '1.1.0-beta01'
+    androidTestImplementation "androidx.fragment:fragment-testing:$fragment_testing_version"
+    debugImplementation("androidx.fragment:fragment-testing:$fragment_testing_version") {
+        //There is a bug in this library requiring androidx.test specific versions
+        //that conflicts with androidTestImplementation deps.
+        //It adds a custom activity so we have to se it as debugImplementation
+        //But don't include any of it's additional dependencies.
         exclude group: 'androidx.test'
     }
 }
